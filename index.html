@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Libre Maps</title>
+    <link rel="stylesheet" href="//librewiki.net/load.php?debug=false&amp;lang=ko&amp;modules=ext.echo.badge%7Cext.gadget.ReferenceTooltips%7Cmediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.ui.button%7Cskins.libre.styles&amp;only=styles&amp;skin=libre&amp;*">
+    <link rel="stylesheet" href="//librewiki.net/load.php?debug=false&amp;lang=ko&amp;modules=site&amp;only=styles&amp;skin=libre&amp;*">
+    <link rel="stylesheet" href="/style.css?ver=3.0">
+    <script src="/lib/jquery-2.1.4.min.js"></script>
+    <script src="/lib/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+    <script src="/lib/jquery.mousewheel.min.js"></script>
+    <script src="//maps.googleapis.com/maps/api/js?v=3.exp&amp;region=KR"></script>
+    <script src="/lib/markerwithlabel_packed.js"></script>
+    <script src="/main.min.js?ver=3.105"></script>
+</head>
+<body>
+    <div id="panel">
+        <select id="groupselect">
+            <option selected="true" value="9999">분류</option>
+        </select>
+        <span>누구나 등록할 수 있습니다! 우클릭을 해보세요. <a href="/help.html">도움말</a></span>
+        <span id = "searches">
+            <input id="address" type="textbox" value="">
+            <input id ="searchinput" type="button" value="검색" onclick="codeAddress()">
+        </span>
+        <input id="recentbutton" type="button" value="최근갱신" onclick="recent()">
+        <input id="noticebutton" type="button" value="공지사항" onclick="notice()">
+        <script>
+        $(function(){
+            $("#address").keydown(function(e){
+                if(e.keyCode == 13){
+                    codeAddress();
+                }
+            });
+        });
+        </script>
+    </div>
+    <div id="maindiv">
+        <div id="map-canvas"></div>
+        <div id="right-side">
+            <input id="xbutton" type="button" value="X">
+            <div id="data"></div>
+            <br><br>
+            <hr>
+            <div id="licenses">
+                리브레 맵스에 등록된 모든 마커의 위치, 리브레 위키와의 연결 정보는 개별 마커 등록자가 퍼블릭 도메인으로 배포하여, 자유롭게 사용하실 수 있습니다.<br>
+                또한 리브레 위키의 문서는 <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">크리에이티브 커먼즈 저작자표시-동일조건변경허락 3.0 Unported 라이선스</a>에 따라 이용하실 수 있습니다.
+                <img alt="cc-by-sa" width=6% style="border-width:0" src="/images/by-sa.png">
+            </div>
+        </div>
+    </div>
+    <script>
+    $(document).ready(function(){
+        if($(window).width()<600){
+            mobile = true;
+        }
+        $('#xbutton').click(function(event) {
+            var options = {direction :"right"};
+            $('#right-side').hide();
+            $('#map-canvas').width('100%');
+        });
+        $('#maindiv').height($(window).height()-$('#panel').outerHeight());
+    });
+    $(window).resize(function(){
+        $('#maindiv').height($(window).height()-$('#panel').outerHeight());
+        if($(window).width()<600){
+            mobile = true;
+        }else mobile = false;
+    });
+    </script>
+</body>
+</html>

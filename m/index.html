@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Libre Maps</title>
+    <link rel="stylesheet" href="//librewiki.net/load.php?debug=false&amp;lang=ko&amp;modules=ext.echo.badge%7Cext.gadget.ReferenceTooltips%7Cmediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.ui.button%7Cskins.libre.styles&amp;only=styles&amp;skin=libre&amp;*">
+    <link rel="stylesheet" href="//librewiki.net/load.php?debug=false&amp;lang=ko&amp;modules=site&amp;only=styles&amp;skin=libre&amp;*">
+    <link rel="stylesheet" href="./mstyle.css">
+    <script src="/lib/jquery-2.1.4.min.js"></script>
+    <script src="/lib/jquery.mousewheel.min.js"></script>
+    <script src="//maps.googleapis.com/maps/api/js?v=3.exp&amp;region=KR"></script>
+    <script src="/lib/markerwithlabel_packed.js"></script>
+    <script src="/main.min.js?ver=1.1"></script>
+</head>
+<body>
+    <div id="top">
+        <div id="panel">
+            <input id="address" type="textbox" value="">
+            <input type="button" value="검색" onclick="codeAddress()">
+            <script>
+            $(function(){
+                $("#address").keydown(function(e){
+                    if(e.keyCode == 13){
+                        codeAddress();
+                    }
+                });
+            });
+            </script>
+        </div>
+        <div id="map-canvas"></div>
+        <div id="mobile-view_on"><div id="closewindow"><a>창 닫기</a></div><div id="data"></div>
+        <div id="licenses">
+            <hr>
+            리브레 맵스에 등록된 모든 마커의 위치, 리브레 위키와의 연결 정보는 개별 마커 등록자가 퍼블릭 도메인으로 배포하여, 자유롭게 사용하실 수 있습니다.<br>
+            또한 리브레 위키의 문서는 저작권자인, 개별 문서의 편집자들에 의해 <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">크리에이티브 커먼즈 저작자표시-동일조건변경허락 3.0 Unported 라이선스</a>가 적용되어 배포된 것입니다.
+            <img alt="cc-by-sa" width=6% style="border-width:0" src="/images/by-sa.png">
+        </div>
+    </div>
+    <script>
+    $('#closewindow').click(function(){
+        $('#mobile-view_on').css("z-index","-30");
+    });
+    $('#map-canvas').click(function(e){
+        if(markerclick == false){
+            $('#mobile-view_on').css("z-index","-30");
+        }
+        markerclick = false;
+    });
+    </script>
+</div>
+</body>
+</html>
