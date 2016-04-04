@@ -1,32 +1,47 @@
 <?php
 require('../lib/simplehtmldom_1_5/simple_html_dom.php');
-
-// error_reporting(E_ALL);
-// ini_set("display_errors", 1);
-$page = urlencode(str_replace(" ","_",$_POST['pname']));
+$pagename = $_POST['pname'];//escape
+?>
+<h1 id="firstHeading" class="firstHeading" lang="ko">
+  <span><?php echo $pagename; ?></span>
+</h1><?php
+$page = urlencode(str_replace(" ","_",$pagename));
 $htmldata = file_get_contents('https://librewiki.net/api.php?action=parse&page='.$page.'&format=json&formatversion=2');
 if ($htmldata !== false) {
    $pagedata = json_decode($htmldata);
-   $htmltext = str_get_html($pagedata->parse->text);
-   if($links = $htmltext->find('a[!class],a.new,a.image,a.mw-redirect')){
-       $leng = count($links);
-       for($i=0; $i<$leng; ++$i) {
-           $links[$i]->href = 'https://librewiki.net'.$links[$i]->href;
-           $links[$i]->target = '_blank';
-       }
+   if (property_exists($pagedata, 'parse')){
+     $htmltext = str_get_html($pagedata->parse->text);
+     if($links = $htmltext->find('a[!class],a.new,a.image,a.mw-redirect')){
+         $leng = count($links);
+         for($i=0; $i<$leng; ++$i) {
+             $links[$i]->href = 'https://librewiki.net'.$links[$i]->href;
+             $links[$i]->target = '_blank';
+         }
+     }
+     if($links = $htmltext->find('img')){
+         $leng = count($links);
+         for($i=0; $i<$leng; ++$i) {
+             $links[$i]->src = 'https://librewiki.net'.$links[$i]->src;
+             if($links[$i]->srcset){
+                 $links[$i]->srcset = '';
+             }
+         }
+     }
+     echo $htmltext->outertext;
+   } else {
+     echo <<<heredoc
+     <b>
+     <h3>서버와의 연결이 원활하지 않거나 문서가 없습니다.</h3>
+     <div class="del_marker">
+     <span class="corr_marker">
+     <a>마커 수정</a>
+     </span>&nbsp;|&nbsp;
+     <a>마커 삭제</a>
+     </div>
+     <a href="https://librewiki.net/index.php?title={$pagename}&action=edit">문서 작성하러 리브레 위키로 가기</a>
+     </b>
+heredoc;
    }
-   if($links = $htmltext->find('img')){
-       $leng = count($links);
-       for($i=0; $i<$leng; ++$i) {
-           $links[$i]->src = 'https://librewiki.net'.$links[$i]->src;
-           if($links[$i]->srcset){
-               $links[$i]->srcset = '';
-           }
-       }
-   }
-   echo $htmltext->outertext;
-} else {
-  echo "AAA";
 }
 //    echo "asdfsadf"
 //  }
