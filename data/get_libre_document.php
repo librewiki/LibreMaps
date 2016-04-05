@@ -1,6 +1,6 @@
 <?php
 require('../lib/simplehtmldom_1_5/simple_html_dom.php');
-$pagename = $_POST['pname'];//escape
+$pagename = htmlspecialchars($_POST['pname']);//escape
 ?>
 <h1 id="firstHeading" class="firstHeading" lang="ko">
   <span><?php echo $pagename; ?></span>
