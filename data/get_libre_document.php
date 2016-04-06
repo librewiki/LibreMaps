@@ -4,7 +4,19 @@ $pagename = htmlspecialchars($_POST['pname']);//escape
 ?>
 <h1 id="firstHeading" class="firstHeading" lang="ko">
   <span><?php echo $pagename; ?></span>
-</h1><?php
+</h1>
+<div class="control">
+  <div class="contributer">
+    마커 등록자: <?php echo htmlspecialchars($_POST['cont']);?>
+  </div>
+  <br>
+  <div class="delcor">
+    <span class="corr_marker"><a href="javascript:">마커 수정</a></span>&nbsp;|&nbsp;
+    <span class="del_marker"><a href="javascript:">마커 삭제</a></span>
+  </div>
+  <b><a href="https://librewiki.net/wiki/<?php echo $pagename; ?>"> 리브레 위키에서 보기 <img src="/images/Libre_Wiki-Logo.png" width="5%"></a></b>
+</div>
+<?php
 $page = urlencode(str_replace(" ","_",$pagename));
 $htmldata = file_get_contents('https://librewiki.net/api.php?action=parse&page='.$page.'&format=json&formatversion=2');
 if ($htmldata !== false) {
@@ -29,18 +41,15 @@ if ($htmldata !== false) {
      }
      echo $htmltext->outertext;
    } else {
-     echo <<<heredoc
+     ?>
      <b>
      <h3>서버와의 연결이 원활하지 않거나 문서가 없습니다.</h3>
      <div class="del_marker">
      <span class="corr_marker">
-     <a>마커 수정</a>
-     </span>&nbsp;|&nbsp;
-     <a>마커 삭제</a>
      </div>
      <a href="https://librewiki.net/index.php?title={$pagename}&action=edit">문서 작성하러 리브레 위키로 가기</a>
      </b>
-heredoc;
+     <?php
    }
 }
 //    echo "asdfsadf"
